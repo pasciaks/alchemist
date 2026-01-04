@@ -75,7 +75,7 @@
 
 ```
 
-## Note: For now, the game name 'alchemist' is the only supported game.  This will change soon, but for now I wanted to limit use until I fully test and evaluate if anyone else really would considering using this backend for global scores.  If you are interested in using it, jusst submit a GitHub issue and your proposed game name as well as your itch.io game page.
+## Note: For now, the game name 'alchemist' is the only supported game.  This will change soon, but for now I wanted to limit use until I fully test and evaluate if anyone else really would considering using this backend for global scores.  If you are interested in using it, just submit a GitHub issue with your proposed game name as well as your itch.io game page link.
 
-## Additionally, if you have or create the appropriate code for Godot, Unity or other platforms that can serve as a simple example of how to use this, please submit that as well and I will include it here.
+## Additionally, if you create the appropriate code for Godot, Unity or other platforms which can serve as a simple example of how to use this, please submit that as well and I will include it here.
 
