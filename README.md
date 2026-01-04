@@ -26,5 +26,56 @@
     }
 
 
+```
+
+## Here's simple JavaScript code that sends the scores to the backend.
+
+```Javascript
+
+    async function submitScoresForItchGame(
+      playerName,
+      playerTime,
+      playerLevel,
+      playerStars,
+      playerGame
+    ) {
+      try {
+        const response = await fetch(
+          "https://smartsign.smartsigntechnology.com/itch-scores",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // Add auth headers if needed
+            },
+            body: JSON.stringify({
+              playerName: playerName.toString(),
+              playerTime: playerTime.toString(),
+              playerLevel: playerLevel.toString(),
+              playerStars: playerStars.toString(),
+              playerGame: playerGame.toString()
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Score submitted:", result);
+
+      } catch (err) {
+        console.error("Error submitting score:", err);
+      }
+    }
+
+    // Example usage
+    // submitScoresForItchGame("Player Name", 15.25, "1", "***", "alchemist");
 
 ```
+
+## Note: For now, the game name 'alchemist' is the only supported game.  This will change soon, but for now I wanted to limit use until I fully test and evaluate if anyone else really would considering using this backend for global scores.  If you are interested in using it, jusst submit a GitHub issue and your proposed game name as well as your itch.io game page.
+
+## Additionally, if you have or create the appropriate code for Godot, Unity or other platforms that can serve as a simple example of how to use this, please submit that as well and I will include it here.
+
