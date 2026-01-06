@@ -79,3 +79,67 @@
 
 ## Additionally, if you create the appropriate code for Godot, Unity or other platforms which can serve as a simple example of how to use this, please submit that as well and I will include it here.
 
+
+## A quick Chat GPT search/query and here's what the Get Scores might look like for use in Godot
+
+```gdscript
+
+extends Node
+
+const ITCH_SCORES_URL := "https://smartsign.smartsigntechnology.com/itch-scores-get"
+
+var http_request: HTTPRequest
+
+func _ready():
+    http_request = HTTPRequest.new()
+    add_child(http_request)
+    http_request.request_completed.connect(_on_request_completed)
+
+    # Call it whenever you want
+    get_itch_scores()
+
+
+func get_itch_scores() -> void:
+    var headers = [
+        "Content-Type: application/json"
+    ]
+
+    var err = http_request.request(
+        ITCH_SCORES_URL,
+        headers,
+        HTTPClient.METHOD_GET
+    )
+
+    if err != OK:
+        push_error("Failed to start HTTP request: %s" % err)
+
+
+func _on_request_completed(
+    result: int,
+    response_code: int,
+    headers: PackedStringArray,
+    body: PackedByteArray
+) -> void:
+
+    if result != HTTPRequest.RESULT_SUCCESS:
+        push_error("Request failed with result: %s" % result)
+        return
+
+    if response_code < 200 or response_code >= 300:
+        push_error("HTTP error %s" % response_code)
+        return
+
+    var json_text := body.get_string_from_utf8()
+    var data = JSON.parse_string(json_text)
+
+    if data == null:
+        push_error("Failed to parse JSON")
+        return
+
+    # Equivalent to: return response.json()
+    print("Itch scores:", data)
+
+
+
+```
+
