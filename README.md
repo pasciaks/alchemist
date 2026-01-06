@@ -79,8 +79,15 @@
 
 ## Additionally, if you create the appropriate code for Godot, Unity or other platforms which can serve as a simple example of how to use this, please submit that as well and I will include it here.
 
+---
 
-## A quick Chat GPT search/query and here's what the Get Scores might look like for use in Godot
+# Chat GPT yielded the following conversions for possible use in Godot
+
+---
+
+## Godot Script (GDScript 4.x)
+
+## You can drop this on any Node.
 
 ```gdscript
 
@@ -139,6 +146,96 @@ func _on_request_completed(
     # Equivalent to: return response.json()
     print("Itch scores:", data)
 
+
+
+```
+
+## Godot 4.x — POST Score Submission Script
+
+## Attach this to any Node.
+
+```gdscript
+
+extends Node
+
+const SUBMIT_SCORE_URL := "https://smartsign.smartsigntechnology.com/itch-scores"
+
+var http_request: HTTPRequest
+
+
+func _ready():
+    http_request = HTTPRequest.new()
+    add_child(http_request)
+    http_request.request_completed.connect(_on_submit_completed)
+
+    # Example usage
+    submit_scores_for_itch_game(
+        "Player Name",
+        15.25,
+        "1",
+        "***",
+        "alchemist"
+    )
+
+
+func submit_scores_for_itch_game(
+    player_name,
+    player_time,
+    player_level,
+    player_stars,
+    player_game
+) -> void:
+
+    var headers = [
+        "Content-Type: application/json"
+        # Add auth headers here if needed
+        # "Authorization: Bearer TOKEN"
+    ]
+
+    var payload = {
+        "playerName": str(player_name),
+        "playerTime": str(player_time),
+        "playerLevel": str(player_level),
+        "playerStars": str(player_stars),
+        "playerGame": str(player_game)
+    }
+
+    var json_body := JSON.stringify(payload)
+
+    var err = http_request.request(
+        SUBMIT_SCORE_URL,
+        headers,
+        HTTPClient.METHOD_POST,
+        json_body
+    )
+
+    if err != OK:
+        push_error("Failed to start POST request: %s" % err)
+
+
+func _on_submit_completed(
+    result: int,
+    response_code: int,
+    headers: PackedStringArray,
+    body: PackedByteArray
+) -> void:
+
+    if result != HTTPRequest.RESULT_SUCCESS:
+        push_error("Request failed: %s" % result)
+        return
+
+    if response_code < 200 or response_code >= 300:
+        push_error("HTTP error! status: %s" % response_code)
+        return
+
+    var json_text := body.get_string_from_utf8()
+    var data = JSON.parse_string(json_text)
+
+    if data == null:
+        push_error("Failed to parse response JSON")
+        return
+
+    print("Score submitted:", data)
 
 
 ```
